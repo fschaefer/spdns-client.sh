@@ -28,7 +28,7 @@ Supported options:
     -i  <IP>        IP address; if omitted or value is in private
                     subnet (10.0.0.0/8, 172.16.0.0/20 or 192.168.0.0/16)
                     the requesting IP is used
-                    
+
 EOT
 }
 
@@ -71,6 +71,7 @@ while getopts hvu:p:d:i: OPT; do
             # getopts issues an error message
             print_version >&2
             print_usage >&2
+            exit 1
             ;;
     esac
 done
