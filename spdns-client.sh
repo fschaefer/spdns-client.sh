@@ -1,23 +1,30 @@
 #!/bin/sh
+#
+# spdns-client.sh: Shell script to update DNS records on http://spdns.de/
+#
+# Florian Schäfer <florian.schaefer@gmail.com>, 2014-01-13
+#
+# Requires curl(1).
+#
 
-VERSION="0.1"
+VERSION="1.0"
 PROGNAME="$(basename $0)"
 
-CONFIG="$HOME/.spdns-client"
+CONFIG="${HOME}/.spdns-client"
 
 SPDNS_USER=""
 SPDNS_PASS=""
 SPDNS_HOST=""
 SPDNS_IP="192.168.0.1"
 
-if [ -f "$CONFIG" ]
+if [ -f "${CONFIG}" ]
 then
-    . "$CONFIG"
+    . "${CONFIG}"
 fi
 
 print_usage () {
     cat <<EOT
-Usage:	$PROGNAME -u <username> -p <password> -d <host> [-i <IP>]
+Usage:  ${PROGNAME} -u <username> -p <password> -d <host> [-i <IP>]
 
 Supported options:
     -h              print this help message
@@ -33,20 +40,20 @@ EOT
 }
 
 print_version () {
-    echo "$PROGNAME $VERSION"
+    echo "${PROGNAME} ${VERSION}"
 }
 
 update_dns () {
     curl -s \
-        -u "$SPDNS_USER":"$SPDNS_PASS" \
-        -F "hostname=$SPDNS_HOST" \
-        -F "myip=$SPDNS_IP" \
+        -u "${SPDNS_USER}":"${SPDNS_PASS}" \
+        -F "hostname=${SPDNS_HOST}" \
+        -F "myip=${SPDNS_IP}" \
         http://www.spdns.de/nic/update
 }
 
 while getopts hvu:p:d:i: OPT; do
-    case "$OPT" in
-        h)
+    case "${OPT}" in
+        h|\?)
             print_version
             print_usage
             exit 0
@@ -56,19 +63,18 @@ while getopts hvu:p:d:i: OPT; do
             exit 0
             ;;
         u)
-            SPDNS_USER="$OPTARG"
+            SPDNS_USER="${OPTARG}"
             ;;
         p)
-            SPDNS_PASS="$OPTARG"
+            SPDNS_PASS="${OPTARG}"
             ;;
         d)
-            SPDNS_HOST="$OPTARG"
+            SPDNS_HOST="${OPTARG}"
             ;;
         i)
-            SPDNS_IP="$OPTARG"
+            SPDNS_IP="${OPTARG}"
             ;;
-        \?)
-            # getopts issues an error message
+        *)
             print_version >&2
             print_usage >&2
             exit 1
@@ -76,9 +82,9 @@ while getopts hvu:p:d:i: OPT; do
     esac
 done
 
-shift "$(expr $OPTIND - 1)"
+shift "$(expr ${OPTIND} - 1)"
 
-if [ "$SPDNS_USER" = "" ] || [ "$SPDNS_PASS" = "" ] || [ "$SPDNS_HOST" = "" ] || [ "$SPDNS_IP" = "" ]
+if [ -z "${SPDNS_USER}" -o -z "${SPDNS_PASS}" -o -z "${SPDNS_HOST}" -o -z "${SPDNS_IP}" ]
 then
     print_version >&2
     print_usage >&2

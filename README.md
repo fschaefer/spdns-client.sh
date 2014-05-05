@@ -5,7 +5,7 @@ Shell script to update DNS records on http://spdns.de/
 
 Usage:
 ```
-spdns-client.sh 0.1
+spdns-client.sh 1.0
 Usage:	spdns-client.sh -u <username> -p <password> -d <host> [-i <IP>]
 
 Supported options:
