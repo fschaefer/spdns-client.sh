@@ -48,7 +48,7 @@ update_dns () {
         -u "${SPDNS_USER}":"${SPDNS_PASS}" \
         -F "hostname=${SPDNS_HOST}" \
         -F "myip=${SPDNS_IP}" \
-        http://www.spdns.de/nic/update
+        http://update.spdyn.de/nic/update
 }
 
 while getopts hvu:p:d:i: OPT; do
